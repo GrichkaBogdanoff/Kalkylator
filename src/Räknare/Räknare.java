@@ -3,50 +3,38 @@ package Räknare;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class Räknare extends Application implements EventHandler<ActionEvent> {
-
-	public static void main(String[] args) {
-		launch();
-		int nummer1 = 0;
-		int nummer2 = 0;
-		String num = "";
-		String num2 = "";
-		String mid ="";
-		int jeff = 0;
-		int sum = 0;
-	}
-	
+public class Räknare extends Application implements EventHandler<ActionEvent> {	
 	ArrayList<Button> numpad;
 
-	
 	Stage stage;
-	HBox Layout;
+	VBox Layout;
 	Scene scene;
 	GridPane gridPane;
+	TextField textfield;
 		
 	Button slider;
 	int rowIndex;
 	int columnIndex;
+	String e;
 	
 	String a;
-	Button ResultB;
-	Button MultB;
-	Button DivB;
-	Button PlusB;
-	Button MinusB;
-	Button CB;
-	
-	int nummer1;
-	int nummer2;
-	int sum;
+
+	double nummer1;
+	double nummer2;
+	double sum;
 	
 	String num2;
 	String num;
@@ -57,20 +45,34 @@ public class Räknare extends Application implements EventHandler<ActionEvent> {
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		numpad = new ArrayList<Button>();
+				
 		MakeButton();
-		gridPane = new GridPane();
-			
-		ShowButton();
 
+		gridPane = new GridPane();
+		gridPane.setPadding(new Insets(0));
+		gridPane.setVgap(5);
+		gridPane.setHgap(5);
+		gridPane.setAlignment(Pos.CENTER);
 		
-		Layout = new HBox();
+		TextField textfield = new TextField();
+		textfield.setEditable(false);
+		textfield.setStyle("-fx-background-color: white;"
+						+"-fx-border-width: 1px;"
+						+ "-fx-border-color: black;");
+		textfield.setAlignment(Pos.CENTER_RIGHT);
+		
+		ShowButton();
+		
+		Layout = new VBox();
+		Layout.getChildren().add(textfield);
 		Layout.getChildren().add(gridPane);
 
-		scene = new Scene(Layout, 500, 200);
-		
-		stage.setScene(scene);
+		scene = new Scene(Layout, 250, 220);
+	    stage.setResizable(false);
+		stage.setScene(scene);	
 		stage.show();
-	}
+	}	
+
 	public void math() {
 		if(jeff == 0){
 			if (num == null){
@@ -82,9 +84,10 @@ public class Räknare extends Application implements EventHandler<ActionEvent> {
 				num += a;
 			}
 			nummer1 = Integer.valueOf(num);
+			System.out.println(nummer1);
 
-			}
-			else if(jeff == 1)
+		}
+			else if(jeff != 0)
 			{
 				if (num2 == null){
 					num2 = a;
@@ -94,57 +97,97 @@ public class Räknare extends Application implements EventHandler<ActionEvent> {
 					num2 += a;
 			}
 			nummer2 = Integer.valueOf(num2);
+			System.out.println(nummer2);
 			}
-		System.out.println(num);
-
-	}
+	}	
 	
 	@Override
-	public void handle(ActionEvent event) {		
-	 if (event.getSource() == PlusB)
-		{
+	public void handle(ActionEvent event) {
+		if(event.getSource()==numpad.get(8)){
+			a = "1";
+			math();
+		}
+		else if(event.getSource()==numpad.get(9)){
+			a = "2";
+			math();
+		}
+		else if(event.getSource()==numpad.get(10)){
+			a = "3";
+			math();
+		}
+		else if(event.getSource()==numpad.get(4)){
+			a = "4";
+			math();
+		}
+		else if(event.getSource()==numpad.get(5)){
+			a = "5";
+			math();
+		}
+		else if(event.getSource()==numpad.get(6)){
+			a = "6";
+			math();
+		}
+		else if(event.getSource()==numpad.get(0)){
+			a = "7";
+			math();
+		}
+		else if(event.getSource()==numpad.get(1)){
+			a = "8";
+			math();
+		}
+		else if(event.getSource()==numpad.get(2)){
+			a ="9";
+			math();
+		}
+		else if(event.getSource()==numpad.get(13)){
+			a = "0";
+			math();
+			}
+		
+		else if (event.getSource() == numpad.get(11)){
 			jeff = 1;
 			if (num != null) {
 				mid = "+";
 			}
 		}
-		else if (event.getSource() == MinusB)
-		{
-			jeff = 1;
+		else if (event.getSource() == numpad.get(7)){
+			jeff = 2;
 			if (num != null) {
 				mid = "-";
 			}
 		}
-		else if (event.getSource() == MultB)
-		{
-			jeff = 1;
+		else if (event.getSource() == numpad.get(3)){
+			jeff = 3;
 			if (num != null) {
 				mid = "*";			
 			}
 		}
-		else if (event.getSource() == DivB)
-		{
-			jeff = 1;
+		else if (event.getSource() == numpad.get(14)){
+			jeff = 4;
 			if (num != null) {
 				mid = "/";
 			}
 		}
-		else if (event.getSource() == ResultB)
-		{
-			if(mid == "+") {
-				sum = nummer1 + nummer2;
+		
+		else if (event.getSource() == numpad.get(15)){
+			if(jeff == 1) {
+				add Addition = new add();
+				sum = Addition.tal(nummer1, nummer2);
 			}
-			else if(mid == "-")
+			else if(jeff == 2)
 			{
-				sum = nummer1 - nummer2;
+				sub Subtraction = new sub();
+				sum = Subtraction.tal(nummer1, nummer2);
 			}
-			else if(mid == "/")
+			else if(jeff == 3)
 			{
-				sum = nummer1 / nummer2;
+				mult Multiplication = new mult();
+				sum = Multiplication.tal(nummer1, nummer2);
 			}
-			else if(mid == "*")
+			else if(jeff == 4)
 			{
-				sum = nummer1 * nummer2;
+				div Division = new div();
+				sum = Division.tal(nummer1, nummer2);
 			}
 			System.out.println(sum);
 			jeff = 0;
@@ -155,8 +198,8 @@ public class Räknare extends Application implements EventHandler<ActionEvent> {
 	
 	private void ShowButton() {
 		int buttonIndex = 0;
-		for(int rowIndex = 0; rowIndex < 3; rowIndex++){
-			for(int columnIndex = 0; columnIndex < 3; columnIndex++) {
+		for(int rowIndex = 0; rowIndex < 4; rowIndex++){
+			for(int columnIndex = 0; columnIndex < 4; columnIndex++) {
 				gridPane.add(numpad.get(buttonIndex), columnIndex, rowIndex);
 				buttonIndex++;
 				if (buttonIndex == numpad.size()) {
@@ -164,16 +207,30 @@ public class Räknare extends Application implements EventHandler<ActionEvent> {
 			}
 		}
 	}
-}
+}	
 	
 	private void MakeButton() {
-		char[] greg = {'1','2','3','4','5','6','7','8','9'};
+		char[] greg = {'7','8','9','*',
+				       '4','5','6','-',
+				       '1','2','3','+',
+				       'C','0','/','='};
+		
 		for(char craig : greg) {
 			String blegg = craig + "";
 			Button slider = new Button(blegg);
 			slider.setId(blegg);
 			slider.setOnAction(this);
+			slider.setStyle(
+				  "-fx-background-color: white;"
+				  + "-fx-text-fill: black;"
+				  + "-fx-font-size: 20px;");
+			slider.setPrefHeight(45);
+			slider.setPrefWidth(55);
+			numpad.add(slider);
 		}
-		numpad.add(slider);
+	}
+	 
+	public static void main(String[] args) {
+		launch();
 	}
 }
